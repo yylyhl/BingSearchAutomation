@@ -12,4 +12,8 @@
     <PackageReference Include="Selenium.Support" Version="4.22.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BingSearchCommon\BingSearchCommon.csproj" />
+  </ItemGroup>
+
 </Project>

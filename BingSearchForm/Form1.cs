@@ -9,6 +9,7 @@ namespace BingSearchForm
         {
             InitializeComponent();
             MWindowToDo.Enabled = false;
+            new Thread(delegate () { BingSearchCommon.RandomSearchTerm.GenerateUniqueQuestions(100); }) { IsBackground = true }.Start();
         }
 
         private void BtnToDo_Click(object sender, EventArgs e)
@@ -24,9 +25,10 @@ namespace BingSearchForm
             for (int i = 0; i < times; i++)
             {
                 Thread.Sleep(rnd.Next(2000, 10000));
-                string randomSearchTerm = GenerateRandomSearchTerm(hanzi3500);
-                lastSearch = randomSearchTerm + suffix;
-                SendKeys.Send(randomSearchTerm);// 模拟键盘输入
+                string query = BingSearchCommon.RandomSearchTerm.GenerateRandomSearchTerm() + i;
+                query = BingSearchCommon.RandomSearchTerm.UniqueQuestions[i];
+                lastSearch = query + suffix;
+                SendKeys.Send(query);// 模拟键盘输入
                 Thread.Sleep(20);
                 SendKeys.SendWait("{ENTER}");// 模拟按下回车键进行搜索
             }
@@ -44,15 +46,17 @@ namespace BingSearchForm
 
         private void MWindowToDo_Click(object sender, EventArgs e)
         {
-            _ = int.TryParse(TxtTimes.Text, out var count);
-            count = Math.Max(count, 1);
-            count = Math.Min(count, 99);
-            //count++;
+            _ = int.TryParse(TxtTimes.Text, out var times);
+            times = Math.Max(times, 1);
+            times = Math.Min(times, 99);
+            var questions = GenerateUniqueQuestions(times);
             var rnd = new Random();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < times; i++)
             {
                 Thread.Sleep(rnd.Next(2000, 10000));
-                AutoSearchByWinApi();
+                string query = GenerateRandomSearchTerm(hanzi3500);
+                query = questions[i];
+                AutoSearchByWinApi(query);
             }
         }
         // 导入 FindWindow 和 PostMessage API 函数
@@ -65,25 +69,41 @@ namespace BingSearchForm
         public const int WM_CLOSE = 0x10; // 关闭窗口的消息常量
 
         private static string suffix => " - 搜索";
-        private void AutoSearchByWinApi()
+        private void AutoSearchByWinApi(string query)
         {
-            string randomSearchTerm = GenerateRandomSearchTerm(hanzi3500);
             var edgeDriverPath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
             Process.Start(edgeDriverPath);
 
             Thread.Sleep(2000);
 
-            SendKeys.Send(randomSearchTerm);// 模拟键盘输入
+            SendKeys.Send(query);// 模拟键盘输入
             Thread.Sleep(20);
             SendKeys.SendWait("{ENTER}");// 模拟按下回车键进行搜索
 
 
             Thread.Sleep(2000);
-            IntPtr ptr = FindWindow(null, randomSearchTerm + suffix);
+            IntPtr ptr = FindWindow(null, query + suffix);
             if (ptr != IntPtr.Zero)
             {
                 SendMessage(ptr, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
+        }
+
+        static List<string> GenerateUniqueQuestions(int count)
+        {
+            HashSet<string> uniqueQuestions = new HashSet<string>();
+            Random random = new Random();
+            string[] who = { "谁", "哪个人", "什么组织" };
+            string[] action = { "发明了", "设计了", "创造了" };
+            string[] what = { "电话", "电脑", "互联网" };
+
+            while (uniqueQuestions.Count < count)
+            {
+                string question = $"{who[random.Next(who.Length)]}{action[random.Next(action.Length)]}{what[random.Next(what.Length)]}？";
+                uniqueQuestions.Add(question);
+            }
+
+            return new List<string>(uniqueQuestions);
         }
         /// <summary>
         /// 生成随机搜索词
