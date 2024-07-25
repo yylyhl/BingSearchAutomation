@@ -24,6 +24,9 @@
 
         private async Task OpenEdge()
         {
+            _ = int.TryParse(doTimes.Text, out var times);
+            times = Math.Max(times, 1);
+            times = Math.Min(times, 99);
             var rdm = new Random();
             for (int i = 0; i < 10; i++)
             {
@@ -31,14 +34,23 @@
                 {
                     string query = GenerateRandomSearchTerm(hanzi3500) + i;
                     var searchUrl = $"https://cn.bing.com/search?q={query}";
-                    await Browser.OpenAsync(searchUrl);
+                    //await Browser.OpenAsync(searchUrl);
+                    var options = new BrowserLaunchOptions
+                    {
+                        LaunchMode = BrowserLaunchMode.External,
+                        Flags = BrowserLaunchFlags.LaunchAdjacent
+                    };
+                    await Browser.Default.OpenAsync(searchUrl, options);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"发生错误: {ex.Message}");
+                    await DisplayAlert("error", ex.Message + "\n" + ex.StackTrace, "知道了");
+                    Environment.Exit(0);
                 }
                 Thread.Sleep(rdm.Next(1500, 10000));
             }
+            await DisplayAlert("tip","执行结束", "OK");
+            Environment.Exit(0);
         }
 
 

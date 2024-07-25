@@ -23,7 +23,7 @@
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
-
+            <Entry x:Name="doTimes" Text="30"/>
             <Button
                 x:Name="CounterBtn"
                 Text="Click me" 
