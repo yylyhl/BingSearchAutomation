@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BingSearchWinUI3 (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "BingSearchWinUI3 (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
