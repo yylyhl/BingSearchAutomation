@@ -9,7 +9,16 @@ namespace BingSearchForm
         {
             InitializeComponent();
             MWindowToDo.Enabled = false;
+            BtnStop.Enabled = false;
+            label2.Text = string.Empty;
             new Thread(delegate () { BingSearchCommon.RandomSearchTerm.GenerateUniqueQuestions(100); }) { IsBackground = true }.Start();
+        }
+
+        private void BtnStop_Click(object sender, EventArgs e)
+        {
+            new Thread(delegate () { Thread.Sleep(3000); Environment.Exit(0); }) { IsBackground = true }.Start();
+            this.TopMost = false;
+            MessageBox.Show("终止");
         }
 
         private void BtnToDo_Click(object sender, EventArgs e)
@@ -24,13 +33,22 @@ namespace BingSearchForm
             var lastSearch = "新标签页";
             for (int i = 0; i < times; i++)
             {
-                Thread.Sleep(rnd.Next(2000, 10000));
+                var sleep = rnd.Next(3000, 30000);
+                Invoke(new MethodInvoker(delegate ()
+                {
+                    label2.Text = $"next wait {sleep} ms";
+                }));
+                Thread.Sleep(sleep);
                 string query = BingSearchCommon.RandomSearchTerm.GenerateRandomSearchTerm() + i;
                 query = BingSearchCommon.RandomSearchTerm.UniqueQuestions[i];
                 lastSearch = query + suffix;
                 SendKeys.Send(query);// 模拟键盘输入
                 Thread.Sleep(20);
                 SendKeys.SendWait("{ENTER}");// 模拟按下回车键进行搜索
+                Invoke(new MethodInvoker(delegate ()
+                {
+                    TxtTimes.Text = "left: " + (times - i);
+                }));
             }
             Thread.Sleep(1000);
             IntPtr ptr = FindWindow(null, lastSearch);

@@ -32,6 +32,8 @@
             label1 = new Label();
             MWindowToDo = new Button();
             BtnToDo = new Button();
+            label2 = new Label();
+            BtnStop = new Button();
             SuspendLayout();
             // 
             // TxtTimes
@@ -71,13 +73,34 @@
             BtnToDo.UseVisualStyleBackColor = true;
             BtnToDo.Click += BtnToDo_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(29, 180);
+            label2.Name = "label2";
+            label2.Size = new Size(31, 17);
+            label2.TabIndex = 2;
+            label2.Text = "wait";
+            // 
+            // BtnStop
+            // 
+            BtnStop.Location = new Point(29, 151);
+            BtnStop.Name = "BtnStop";
+            BtnStop.Size = new Size(219, 23);
+            BtnStop.TabIndex = 0;
+            BtnStop.Text = "停 止";
+            BtnStop.UseVisualStyleBackColor = true;
+            BtnStop.Click += BtnStop_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(274, 150);
+            ClientSize = new Size(274, 206);
+            Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(TxtTimes);
+            Controls.Add(BtnStop);
             Controls.Add(BtnToDo);
             Controls.Add(MWindowToDo);
             MaximizeBox = false;
@@ -94,5 +117,7 @@
         private Label label1;
         private Button MWindowToDo;
         private Button BtnToDo;
+        private Label label2;
+        private Button BtnStop;
     }
 }
