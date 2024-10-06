@@ -25,7 +25,8 @@ namespace BingSearchForm
         {
             _ = int.TryParse(TxtTimes.Text, out var times);
             times = Math.Max(times, 1);
-            times = Math.Min(times, 99);
+            times = Math.Min(times, 999999);
+            TxtTimes.Text = times.ToString();
             var rnd = new Random();
 
             var edgeDriverPath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
