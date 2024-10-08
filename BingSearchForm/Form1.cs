@@ -27,11 +27,12 @@ namespace BingSearchForm
             times = Math.Max(times, 1);
             times = Math.Min(times, 999999);
             TxtTimes.Text = times.ToString();
-            var rnd = new Random();
+            if (times > 100) BingSearchCommon.RandomSearchTerm.GenerateUniqueQuestions(times);
 
             var edgeDriverPath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
             Process.Start(edgeDriverPath);
             var lastSearch = "新标签页";
+            var rnd = new Random();
             for (int i = 0; i < times; i++)
             {
                 var sleep = rnd.Next(3000, 30000);
